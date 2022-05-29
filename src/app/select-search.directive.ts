@@ -29,21 +29,30 @@ export class SelectSearchDirective implements OnInit, OnDestroy {
   }
 
   constructor(
-    @Host() private select: MatSelect,
     private hostElRef: ElementRef,
-    private focusMonitor: FocusMonitor
+    private focusMonitor: FocusMonitor,
+    private select: MatSelect
   ) {}
 
   @HostListener('input')
   onInput() {
     this.select.options.forEach((option) => {
-      option
-        ._getHostElement()
-        .toggleAttribute(
-          'hidden',
-          this.filterFn(option, this.inputElement.value)
-        );
+      const isFiltered = this.filterFn(option, this.inputElement.value);
+
+      option.disabled = isFiltered;
+      option._getHostElement().toggleAttribute('hidden', isFiltered);
     });
+  }
+
+  /**
+   * @param event Listen KeyDown event for Space key
+   * @description stop the Space key event propagation further to prevent the default
+      behaviour of Space key of selecting the focussed option in case of mat-select component
+   */
+
+  @HostListener('keydown.space', ['$event'])
+  stopSpaceKeyDownPropagation(event: KeyboardEvent) {
+    event.stopPropagation();
   }
 
   ngOnInit(): void {
