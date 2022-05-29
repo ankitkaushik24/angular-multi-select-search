@@ -34,6 +34,10 @@ export class SelectSearchDirective implements OnInit, OnDestroy {
     private select: MatSelect
   ) {}
 
+  /**
+   * @description Whenever we receive any input in our search input
+   * it queries all the options and disables and hide all the unmatched items.
+   */
   @HostListener('input')
   onInput() {
     this.select.options.forEach((option) => {
@@ -60,14 +64,17 @@ export class SelectSearchDirective implements OnInit, OnDestroy {
     this.select.openedChange
       .pipe(takeUntil(this.destroy$))
       .subscribe((isOpened) => {
-        if (isOpened) {
+        if (isOpened) { // on open
           this.focusMonitor.focusVia(this.inputElement, 'keyboard');
-        } else {
+        } else { // on close
           this.inputElement.value = '';
           this.inputElement.dispatchEvent(new Event('input'));
         }
       });
 
+    // while user selects any option
+    // selects the feeded text for the user
+    // to make any update directly inside the input
     this.select.optionSelectionChanges
       .pipe(
         filter((e) => e.isUserInput),
