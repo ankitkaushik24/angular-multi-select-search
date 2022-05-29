@@ -45,9 +45,10 @@ export class SelectSearchDirective implements OnInit, OnDestroy {
   }
 
   /**
-   * @param event Listen KeyDown event for Space key
-   * @description stop the Space key event propagation further to prevent the default
-      behaviour of Space key of selecting the focussed option in case of mat-select component
+   * @description stop the Space key event propagation further to prevent 
+   * the default behaviour of Space key of selecting 
+   * the focussed option in case of mat-select component
+   * @param event KeyDown event for Space key
    */
 
   @HostListener('keydown.space', ['$event'])
